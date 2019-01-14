@@ -43,6 +43,16 @@ int main()
 	title->Start();
 	delete title;
 
+	// Scene loop:
+	// Game -> Game over -> Game
+	//					 -> Title
+	while (running) {
+		Game* game = new Game();
+		int winner = game->Start();
+		delete game;
+		std::cout << "Winner: " << winner << std::endl;
+	}
+
 	// Main Game
 	Game* game = new Game();
 	std::cout << game->Start() << std::endl;
