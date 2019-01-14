@@ -29,7 +29,7 @@ int main()
 
 	// Main Game
 	Game* game = new Game();
-	game->Start();
+	std::cout << game->Start() << std::endl;
 	delete game;
 
 	// Cleanup

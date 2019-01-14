@@ -28,6 +28,7 @@ struct Game
     int numPlayers = playerCount();
     int tick = 0;
     bool playing = true;
+    int winner = -1;
 
     void HandleInput()
     {
@@ -53,6 +54,9 @@ struct Game
         }
     }
 
+    /**
+     * Checks if a tile on the map is not occupied by a snake
+     */
     bool IsEmpty(int x, int y)
     {
         for (Player pl : players)
@@ -65,24 +69,34 @@ struct Game
     void Update()
     {
         // See if the game is over
-        playing = false;
-        for (Player pl : players)
-            if (pl.alive) playing = true;
+        std::vector<int> aliveplayers;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.at(i).alive) {
+                aliveplayers.emplace_back(i+1);
+            }
+        }
+        if (aliveplayers.size() == 0 || numPlayers != 1 && aliveplayers.size() == 1) {
+            playing = false;
+            winner = aliveplayers.size() == 1 ? aliveplayers.at(0) : -1;
+            return;
+        }
 
         // Mark the tiles which would kill the player
         std::vector<Point> hitbox;
-        for (Point p : walls)
+        for (Point p : walls) {
             hitbox.emplace_back(p);
-        for (Player pl : players)
-            for (int i = 1; i < pl.snake.size(); i++)
+        }
+        for (Player pl : players) {
+            for (int i = 1; i < pl.snake.size(); i++) {
                 hitbox.emplace_back(pl.snake.at(i));
+            }
+        }
 
         // Movement
         for (int i = 0; i < players.size(); i++) {
             if (!players.at(i).alive) continue;
 
             for (int j = players.at(i).snake.size(); j > 1; j--) {
-                std::cout << "0" << '\n';
                 players.at(i).snake.at(j-1) = players.at(i).snake.at(j-2);
             }
             if (players.at(i).direction == DIR_RIGHT) players.at(i).snake.at(0).x += 1;
@@ -168,7 +182,11 @@ struct Game
         SDL_SetRenderDrawColor(renderer, COLOR_BG, 255);
     }
 
-    void Start()
+    /**
+     * Starts the game, returns the player that wins. If only
+     * one player is playing, returns -1.
+     */
+    int Start()
     {
         // Walls
         for (int i = 0; i < 40; i++) {
@@ -196,5 +214,7 @@ struct Game
     		SDL_RenderPresent(renderer);
     		SDL_Delay(1000/12);
     	}
+
+        return winner;
     }
 };
