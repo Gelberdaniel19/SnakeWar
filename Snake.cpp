@@ -2,7 +2,7 @@
 #include "title.hpp"
 #include "game.hpp"
 
-int main()
+void LoadSDL()
 {
 	// Initialize
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -21,6 +21,22 @@ int main()
 			std::cout << SDL_GameControllerMapping(controllers.at(i)) << std::endl;
 		}
 	}
+}
+
+void CleanSDL()
+{
+	// Cleanup
+	for (int i = 0; i < controllers.size(); i++)
+		SDL_GameControllerClose(controllers.at(i));
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	TTF_Quit();
+	SDL_Quit();
+}
+
+int main()
+{
+	LoadSDL();
 
 	// Title screen
 	TitleScreen* title = new TitleScreen();
@@ -32,11 +48,5 @@ int main()
 	std::cout << game->Start() << std::endl;
 	delete game;
 
-	// Cleanup
-	for (int i = 0; i < controllers.size(); i++)
-		SDL_GameControllerClose(controllers.at(i));
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	TTF_Quit();
-	SDL_Quit();
+	CleanSDL();
 }
