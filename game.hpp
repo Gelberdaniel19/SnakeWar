@@ -21,8 +21,9 @@ struct Player
     }
 };
 
-struct Game
+class Game
 {
+private:
     std::vector<Player> players;
     std::vector<Point> walls, food;
     int numPlayers = playerCount();
@@ -30,6 +31,7 @@ struct Game
     bool playing = true;
     int winner = -1;
 
+    // Read input and adjust player objects accordingly
     void HandleInput()
     {
     	SDL_Event e;
@@ -54,9 +56,7 @@ struct Game
         }
     }
 
-    /**
-     * Checks if a tile on the map is not occupied by a snake
-     */
+    // Checks if a tile on the map is occupied by a snake
     bool IsEmpty(int x, int y)
     {
         for (Player pl : players)
@@ -66,33 +66,51 @@ struct Game
         return true;
     }
 
-    void Update()
+    // Checks if the game is over and sets the winner
+    bool IsGameOver()
     {
-        // See if the game is over
+        // Put alive players into a list of numbers
         std::vector<int> aliveplayers;
         for (int i = 0; i < players.size(); i++) {
             if (players.at(i).alive) {
                 aliveplayers.emplace_back(i+1);
             }
         }
+
+        // If the game is over, set the winner to the player number
+        // which is alive, otherwise -1.
         if (aliveplayers.size() == 0 || numPlayers != 1 && aliveplayers.size() == 1) {
             playing = false;
             winner = aliveplayers.size() == 1 ? aliveplayers.at(0) : -1;
-            return;
+            return true;
         }
 
-        // Mark the tiles which would kill the player
+        return false;
+    }
+
+    // Return a vector of the tiles which would kill the player
+    std::vector<Point> GetKillTiles()
+    {
         std::vector<Point> hitbox;
+
+        // Add walls
         for (Point p : walls) {
             hitbox.emplace_back(p);
         }
+
+        // Add players, except their heads
         for (Player pl : players) {
             for (int i = 1; i < pl.snake.size(); i++) {
                 hitbox.emplace_back(pl.snake.at(i));
             }
         }
 
-        // Movement
+        return hitbox;
+    }
+
+    // Moves all players and kills if they hit a kill tile
+    void MoveAndCollide(std::vector<Point> killTiles)
+    {
         for (int i = 0; i < players.size(); i++) {
             if (!players.at(i).alive) continue;
 
@@ -105,7 +123,7 @@ struct Game
             if (players.at(i).direction == DIR_DOWN) players.at(i).snake.at(0).y += 1;
 
             // Collision
-            for (Point p : hitbox) {
+            for (Point p : killTiles) {
                 if (players.at(i).snake.at(0).x == p.x && players.at(i).snake.at(0).y == p.y) {
                     players.at(i).snake.clear();
                     players.at(i).alive = false;
@@ -113,8 +131,11 @@ struct Game
                 }
             }
         }
+    }
 
-        // Check if food is being eaten
+    // Checks if each food is being eaten, and elongates the snake.
+    void EatFood()
+    {
         for (int i = 0; i < food.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
                 if (players.at(j).alive && food.at(i).x == players.at(j).snake.at(0).x && food.at(i).y == players.at(j).snake.at(0).y) {
@@ -125,22 +146,41 @@ struct Game
                 }
             }
         }
+    }
 
-        // Spawn food once per second
-        if (tick % (24/numPlayers) == 0) {
-            std::mt19937 rng;
-            rng.seed(std::random_device()());
-            std::uniform_int_distribution<std::mt19937::result_type> dist(1, 38);
-            int x, y;
-            do {
-                x = dist(rng);
-                y = dist(rng);
-            } while (!IsEmpty(x, y));
-            food.emplace_back(Point{x, y});
-        }
+    // Randomly spawns a food
+    void AddFood()
+    {
+        std::mt19937 rng;
+        rng.seed(std::random_device()());
+        std::uniform_int_distribution<std::mt19937::result_type> dist(1, 38);
+        int x, y;
+        do {
+            x = dist(rng);
+            y = dist(rng);
+        } while (!IsEmpty(x, y));
+        food.emplace_back(Point{x, y});
+    }
+
+    // Update game logic every tick
+    void Update()
+    {
+        // End if the game is over
+        if (IsGameOver()) return;
+
+        // Movement and collision
+        MoveAndCollide(GetKillTiles());
+
+        // Check if food is being eaten
+        EatFood();
+
+        // Spawn food every some ticks.
+        if (tick % (24/numPlayers) == 0)
+            AddFood();
         tick++;
     }
 
+    // Draws the game every tick
     void Render()
     {
         // Walls
@@ -182,10 +222,9 @@ struct Game
         SDL_SetRenderDrawColor(renderer, COLOR_BG, 255);
     }
 
-    /**
-     * Starts the game, returns the player that wins. If only
-     * one player is playing, returns -1.
-     */
+public:
+    // Starts the game and returns the player that wins. If only
+    // one is playing, then it returns -1.
     int Start()
     {
         // Walls
