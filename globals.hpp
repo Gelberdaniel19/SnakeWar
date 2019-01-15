@@ -29,7 +29,6 @@
 
 const int WIN_WIDTH = 800;
 const int WIN_HEIGHT = WIN_WIDTH;
-const int CONTROLLER_DEADZONE = 10000;
 const int STARTING_TAIL = 5;
 const int TAIL_GAIN = 5;
 
@@ -39,8 +38,7 @@ SDL_Renderer* renderer = nullptr;
 bool running = true;
 
 // Text creation
-struct TextTexture
-{
+struct TextTexture {
 	int w, h;
 	SDL_Texture* texture;
 };
@@ -71,13 +69,12 @@ void renderImage(std::string path, int x, int y) {
 
 // Player management
 std::vector<SDL_GameController*> controllers(8, nullptr);
-std::vector<int> bindings(4, -1);
+int bindings[4] = {-1, -1, -1, -1};
 
 int playerCount() {
 	for (int i = 0; i < 4; i++)
 		if (bindings[i] == -1) return i;
 }
-
 void addPlayer(int cnum) {
 	for (int i = 0; i < 4; i++) {
 		if (bindings[i] == -1) {
@@ -86,7 +83,6 @@ void addPlayer(int cnum) {
 		}
 	}
 }
-
 int getPlayerNum(int cnum) {
 	for (int i = 0; i < 4; i++) {
 		if (bindings[i] == cnum) return i+1;

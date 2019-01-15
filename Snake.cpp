@@ -45,7 +45,6 @@ int main()
 		Game* game = new Game();
 		int winner = game->Start();
 		delete game;
-		std::cout << "Winner: " << winner << std::endl;
 
 		GameOver* gameover = new GameOver();
 		status = gameover->Start(winner);

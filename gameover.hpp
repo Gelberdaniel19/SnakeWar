@@ -10,7 +10,7 @@ private:
     // which says "Player x wins!"
     void RenderVictoryBox()
     {
-        // No victory box for practice mode
+        // No victory box if no winner
         if (winner == -1) return;
 
         // Box for winner
@@ -80,11 +80,13 @@ public:
 
 				case SDL_CONTROLLERBUTTONDOWN:
 					int cnum = e.cbutton.which;
-					// Binds players to controllers
+
+					// Play again
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 						if (getPlayerNum(cnum))
 							return OPTION_AGAIN;
-					// Starts the game
+
+					// Return to menu
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_B)
 						if (getPlayerNum(cnum))
 							return OPTION_MENU;

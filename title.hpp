@@ -16,14 +16,12 @@ private:
 	// Draws the appropriate message into each player box
 	void RenderPlayerMessages()
 	{
-		std::string text1 = "Press \'A\'";
-
 		for (int i = 0; i < 4; i++) {
 			std::string text2 = "Player " + std::to_string(i+1);
 
 			// Load the text texture based on if the player is ready
 			TextTexture t;
-			if (playerCount() < i+1) t = makeText(text1, 30, COLOR_BG);
+			if (playerCount() < i+1) t = makeText("Press \'A\'", 30, COLOR_BG);
 			else t = makeText(text2, 45, 0, 0, 0);
 
 			// Render the text based on which player it is
@@ -74,9 +72,8 @@ public:
 	// The main loop for the title screen
 	void Start()
 	{
-		ClearData();
-
 		// First render
+		ClearData();
 		RenderTitleScreen();
 
 		// User select loop
@@ -92,16 +89,17 @@ public:
 
 				case SDL_CONTROLLERBUTTONDOWN:
 					int cnum = e.cbutton.which;
+
 					// Binds players to controllers
-					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A) {
-						if (!getPlayerNum(cnum)) {
+					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+						if (!getPlayerNum(cnum))
 							addPlayer(cnum);
-						}
-					}
+
 					// Starts the game
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_START)
 						if (getPlayerNum(cnum))
 							selecting = false;
+							
 					RenderTitleScreen();
 					break;
 				}
