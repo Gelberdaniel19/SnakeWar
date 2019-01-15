@@ -16,6 +16,10 @@
 #define COLOR_WALL 170,170,200
 #define COLOR_FOOD 255,220,220
 
+// Game over options
+#define OPTION_AGAIN 0
+#define OPTION_MENU 1
+
 // Directions
 #define DIR_NONE 0
 #define DIR_UP 1

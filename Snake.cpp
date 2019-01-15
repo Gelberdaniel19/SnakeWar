@@ -1,6 +1,7 @@
 #include "globals.hpp"
 #include "title.hpp"
 #include "game.hpp"
+#include "gameover.hpp"
 
 void LoadSDL()
 {
@@ -31,17 +32,24 @@ int main()
 	LoadSDL();
 
 	// Scene loop:
-	// Game -> Game over -> Game
-	//					 -> Title
+	// Title -> Game -> Game over -> Game
+	//					          -> Title
+	int status = OPTION_MENU;
 	while (running) {
-		TitleScreen* title = new TitleScreen();
-		title->Start();
-		delete title;
+		if (status == OPTION_MENU) {
+			TitleScreen* title = new TitleScreen();
+			title->Start();
+			delete title;
+		}
 
 		Game* game = new Game();
 		int winner = game->Start();
 		delete game;
 		std::cout << "Winner: " << winner << std::endl;
+
+		GameOver* gameover = new GameOver();
+		status = gameover->Start(winner);
+		delete gameover;
 	}
 
 	CleanSDL();
