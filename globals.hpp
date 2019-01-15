@@ -38,18 +38,47 @@ SDL_Renderer* renderer = nullptr;
 
 bool running = true;
 
+// Text creation
+struct TextTexture
+{
+	int w, h;
+	SDL_Texture* texture;
+};
+TextTexture makeText(std::string text, int fontSize, Uint8 r, Uint8 g, Uint8 b) {
+	TTF_Font* font = TTF_OpenFont("assets/upheavtt.ttf", fontSize);
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), SDL_Color{r, g, b});
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
+	TextTexture result{surface->w, surface->h, tex};
+	SDL_FreeSurface(surface);
+	TTF_CloseFont(font);
+	return result;
+}
+void renderText(TextTexture t, int x, int y) {
+	SDL_Rect rect{x, y, t.w, t.h};
+	SDL_RenderCopy(renderer, t.texture, NULL, &rect);
+	SDL_DestroyTexture(t.texture);
+}
+
+// Image creation
+void renderImage(std::string path, int x, int y) {
+	SDL_Surface* surface = IMG_Load(path.c_str());
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_Rect rect{x, y, surface->w, surface->h};
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(texture);
+}
+
 // Player management
 std::vector<SDL_GameController*> controllers(8, nullptr);
 std::vector<int> bindings(4, -1);
 
-int playerCount()
-{
+int playerCount() {
 	for (int i = 0; i < 4; i++)
 		if (bindings[i] == -1) return i;
 }
 
-void addPlayer(int cnum)
-{
+void addPlayer(int cnum) {
 	for (int i = 0; i < 4; i++) {
 		if (bindings[i] == -1) {
 			bindings[i] = cnum;
@@ -58,8 +87,7 @@ void addPlayer(int cnum)
 	}
 }
 
-int getPlayerNum(int cnum)
-{
+int getPlayerNum(int cnum) {
 	for (int i = 0; i < 4; i++) {
 		if (bindings[i] == cnum) return i+1;
 	}

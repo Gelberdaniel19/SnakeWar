@@ -15,75 +15,35 @@ private:
 
         // Box for winner
         std::string path = "assets/Player" + std::to_string(winner) + "BG.png";
-        SDL_Surface* surface = IMG_Load(path.c_str());
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_Rect rect{WIN_WIDTH/2-350/2, 200, 350, 300};
-        SDL_RenderCopy(renderer, texture, NULL, &rect);
-        SDL_FreeSurface(surface);
-        SDL_DestroyTexture(texture);
+        renderImage(path, WIN_WIDTH/2-350/2, 200);
 
         // Text inside box
-        TTF_Font* font = TTF_OpenFont("assets/upheavtt.ttf", 35);
-        SDL_Color color = {0, 0, 0};
         std::string text = "Player " + std::to_string(winner) + " wins!";
-        SDL_Surface* temp = TTF_RenderText_Solid(font, text.c_str(), color);
-        SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, temp);
-        rect = {WIN_WIDTH/2-temp->w/2, 200+300/2-temp->h/2, temp->w, temp->h};
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
-        TTF_CloseFont(font);
+        TextTexture t = makeText(text, 35, 0, 0, 0);
+        renderText(t, WIN_WIDTH/2-t.w/2, 200+300/2-t.h/2);
     }
 
     // Renders "game over" and instructions
     void RenderOutsideText()
     {
-        // Make fonts
-        TTF_Font* font1 = TTF_OpenFont("assets/upheavtt.ttf", 55);
-        SDL_Color color1 = {230, 230, 255};
-        TTF_Font* font2 = TTF_OpenFont("assets/upheavtt.ttf", 30);
-        SDL_Color color2 = {210, 210, 235};
-
         // Game over message
-        SDL_Surface* temp = TTF_RenderText_Solid(font1, "Game Over", color1);
-        SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, temp);
-        SDL_Rect rect{WIN_WIDTH/2-temp->w/2, 50, temp->w, temp->h};
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
-        TTF_CloseFont(font1);
+        TextTexture t = makeText("Game Over", 55, 230, 230, 255);
+        renderText(t, WIN_WIDTH/2-t.w/2, 50);
 
         // Instructions message
-        temp = TTF_RenderText_Solid(font2, "Menu", color2);
-        message = SDL_CreateTextureFromSurface(renderer, temp);
-        rect = {50, WIN_HEIGHT-50-temp->h, temp->w, temp->h};
-        int menuHeight = temp->h;
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
+        t = makeText("Menu", 30, 210, 210, 235);
+        int menuHeight = t.h;
+        renderText(t, 50, WIN_HEIGHT-50-t.h);
 
-        temp = TTF_RenderText_Solid(font2, "Again", color2);
-        message = SDL_CreateTextureFromSurface(renderer, temp);
-        rect = {50, WIN_HEIGHT-50-temp->h-menuHeight-10, temp->w, temp->h};
-        int againWidth = temp->w;
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
+        t = makeText("Again", 30, 210, 210, 235);
+        int againWidth = t.w;
+        renderText(t, 50, WIN_HEIGHT-50-t.h-menuHeight-10);
 
-        temp = TTF_RenderText_Solid(font2, "\'B\'", color2);
-        message = SDL_CreateTextureFromSurface(renderer, temp);
-        rect = {50+againWidth+50, WIN_HEIGHT-50-temp->h, temp->w, temp->h};
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
+        t = makeText("\'B\'", 30, 210, 210, 235);
+        renderText(t, 50+againWidth+50, WIN_HEIGHT-50-t.h);
 
-        temp = TTF_RenderText_Solid(font2, "\'A\'", color2);
-        message = SDL_CreateTextureFromSurface(renderer, temp);
-        rect = {50+againWidth+50, WIN_HEIGHT-50-temp->h-menuHeight-10, temp->w, temp->h};
-        SDL_RenderCopy(renderer, message, NULL, &rect);
-        SDL_FreeSurface(temp);
-        SDL_DestroyTexture(message);
-        TTF_CloseFont(font2);
+        t = makeText("\'A\'", 30, 210, 210, 235);
+        renderText(t, 50+againWidth+50, WIN_HEIGHT-50-t.h-menuHeight-10);
     }
 
     // Renders the Game Over screen
