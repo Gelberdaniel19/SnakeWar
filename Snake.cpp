@@ -30,23 +30,18 @@ int main()
 {
 	LoadSDL();
 
-	// Title screen
-	TitleScreen* title = new TitleScreen();
-	title->Start();
-	delete title;
-
 	// Scene loop:
 	// Game -> Game over -> Game
 	//					 -> Title
 	while (running) {
+		TitleScreen* title = new TitleScreen();
+		title->Start();
+		delete title;
+
 		Game* game = new Game();
 		int winner = game->Start();
 		delete game;
 		std::cout << "Winner: " << winner << std::endl;
-
-		TitleScreen* title = new TitleScreen();
-		title->Start();
-		delete title;
 	}
 
 	CleanSDL();

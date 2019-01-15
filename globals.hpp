@@ -36,42 +36,42 @@ bool running = true;
 
 // Player management
 std::vector<SDL_GameController*> controllers(8, nullptr);
-int controller1 = -1;
-int controller2 = -1;
-int controller3 = -1;
-int controller4 = -1;
+int binding1 = -1;
+int binding2 = -1;
+int binding3 = -1;
+int binding4 = -1;
 
 int playerCount()
 {
-	if (controller1 == -1) return 0;
-	else if (controller2 == -1) return 1;
-	else if (controller3 == -1) return 2;
-	else if (controller4 == -1) return 3;
+	if (binding1 == -1) return 0;
+	else if (binding2 == -1) return 1;
+	else if (binding3 == -1) return 2;
+	else if (binding4 == -1) return 3;
 	else return 4;
 }
 void addPlayer(int cnum)
 {
-	if (controller1 == -1)
-		controller1 = cnum;
-	else if (controller2 == -1)
-		controller2 = cnum;
-	else if (controller3 == -1)
-		controller3 = cnum;
-	else if (controller4 == -1)
-		controller4 = cnum;
+	if (binding1 == -1)
+		binding1 = cnum;
+	else if (binding2 == -1)
+		binding2 = cnum;
+	else if (binding3 == -1)
+		binding3 = cnum;
+	else if (binding4 == -1)
+		binding4 = cnum;
 }
 bool playerExists(int cnum)
 {
-	return (controller1 == cnum ||
-			controller2 == cnum ||
-			controller3 == cnum ||
-			controller4 == cnum);
+	return (binding1 == cnum ||
+			binding2 == cnum ||
+			binding3 == cnum ||
+			binding4 == cnum);
 }
 int getPlayerNum(int cnum)
 {
-	if (controller1 == cnum) return 1;
-	else if (controller2 == cnum) return 2;
-	else if (controller3 == cnum) return 3;
-	else if (controller4 == cnum) return 4;
+	if (binding1 == cnum) return 1;
+	else if (binding2 == cnum) return 2;
+	else if (binding3 == cnum) return 3;
+	else if (binding4 == cnum) return 4;
 	else return 0;
 }

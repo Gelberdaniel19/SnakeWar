@@ -99,18 +99,15 @@ private:
 	void ClearData()
 	{
 		// Load controllers
-	    for (int i = 0; i < SDL_NumJoysticks() && i < 8; i++) {
-			if (SDL_IsGameController(i)) {
+	    for (int i = 0; i < SDL_NumJoysticks() && i < 8; i++)
+			if (SDL_IsGameController(i))
 				controllers.at(i) = SDL_GameControllerOpen(i);
-				std::cout << SDL_GameControllerMapping(controllers.at(i)) << std::endl;
-			}
-		}
 
 		// Reset bindings
-		controller1 = -1;
-		controller2 = -1;
-		controller3 = -1;
-		controller4 = -1;
+		binding1 = -1;
+		binding2 = -1;
+		binding3 = -1;
+		binding4 = -1;
 	}
 
 public:
