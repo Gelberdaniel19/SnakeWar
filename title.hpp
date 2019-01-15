@@ -104,10 +104,8 @@ private:
 				controllers.at(i) = SDL_GameControllerOpen(i);
 
 		// Reset bindings
-		binding1 = -1;
-		binding2 = -1;
-		binding3 = -1;
-		binding4 = -1;
+		for (int i = 0; i < 4; i++)
+			bindings[i] = -1;
 	}
 
 public:
@@ -133,12 +131,14 @@ public:
 				case SDL_CONTROLLERBUTTONDOWN:
 					int cnum = e.cbutton.which;
 					// Binds players to controllers
-					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-						if (!playerExists(cnum))
+					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A) {
+						if (!getPlayerNum(cnum)) {
 							addPlayer(cnum);
+						}
+					}
 					// Starts the game
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_START)
-						if (playerExists(cnum))
+						if (getPlayerNum(cnum))
 							selecting = false;
 					RenderTitleScreen();
 					break;

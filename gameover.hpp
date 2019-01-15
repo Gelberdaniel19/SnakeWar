@@ -122,11 +122,11 @@ public:
 					int cnum = e.cbutton.which;
 					// Binds players to controllers
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-						if (playerExists(cnum))
+						if (getPlayerNum(cnum))
 							return OPTION_AGAIN;
 					// Starts the game
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-						if (playerExists(cnum))
+						if (getPlayerNum(cnum))
 							return OPTION_MENU;
 					break;
 				}

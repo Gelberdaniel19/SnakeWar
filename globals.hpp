@@ -40,42 +40,28 @@ bool running = true;
 
 // Player management
 std::vector<SDL_GameController*> controllers(8, nullptr);
-int binding1 = -1;
-int binding2 = -1;
-int binding3 = -1;
-int binding4 = -1;
+std::vector<int> bindings(4, -1);
 
 int playerCount()
 {
-	if (binding1 == -1) return 0;
-	else if (binding2 == -1) return 1;
-	else if (binding3 == -1) return 2;
-	else if (binding4 == -1) return 3;
-	else return 4;
+	for (int i = 0; i < 4; i++)
+		if (bindings[i] == -1) return i;
 }
+
 void addPlayer(int cnum)
 {
-	if (binding1 == -1)
-		binding1 = cnum;
-	else if (binding2 == -1)
-		binding2 = cnum;
-	else if (binding3 == -1)
-		binding3 = cnum;
-	else if (binding4 == -1)
-		binding4 = cnum;
+	for (int i = 0; i < 4; i++) {
+		if (bindings[i] == -1) {
+			bindings[i] = cnum;
+			break;
+		}
+	}
 }
-bool playerExists(int cnum)
-{
-	return (binding1 == cnum ||
-			binding2 == cnum ||
-			binding3 == cnum ||
-			binding4 == cnum);
-}
+
 int getPlayerNum(int cnum)
 {
-	if (binding1 == cnum) return 1;
-	else if (binding2 == cnum) return 2;
-	else if (binding3 == cnum) return 3;
-	else if (binding4 == cnum) return 4;
-	else return 0;
+	for (int i = 0; i < 4; i++) {
+		if (bindings[i] == cnum) return i+1;
+	}
+	return 0;
 }
