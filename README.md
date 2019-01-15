@@ -6,3 +6,6 @@ This game follows the basic rules of Snake, but the game features a larger map a
 This game currently requires gamepads to play. These can be anthing from PS4 or XBox to third party controllers.
 
 I probably won't develop this any further as the code looks great and the game plays flawlessly. I may add sound or a countdown to the beginning of the game, but probably not.
+
+# Compilation
+The Makefile should cover compilation. Just make sure you have SDL installed on your computer
