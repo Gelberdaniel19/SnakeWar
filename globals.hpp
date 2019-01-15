@@ -27,6 +27,7 @@ const int WIN_WIDTH = 800;
 const int WIN_HEIGHT = WIN_WIDTH;
 const int CONTROLLER_DEADZONE = 10000;
 const int STARTING_TAIL = 5;
+const int TAIL_GAIN = 5;
 
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;

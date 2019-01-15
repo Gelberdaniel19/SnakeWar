@@ -98,9 +98,9 @@ private:
             hitbox.emplace_back(p);
         }
 
-        // Add players, except their heads
+        // Add players
         for (Player pl : players) {
-            for (int i = 1; i < pl.snake.size(); i++) {
+            for (int i = 0; i < pl.snake.size(); i++) {
                 hitbox.emplace_back(pl.snake.at(i));
             }
         }
@@ -114,9 +114,8 @@ private:
         for (int i = 0; i < players.size(); i++) {
             if (!players.at(i).alive) continue;
 
-            for (int j = players.at(i).snake.size(); j > 1; j--) {
+            for (int j = players.at(i).snake.size(); j > 1; j--)
                 players.at(i).snake.at(j-1) = players.at(i).snake.at(j-2);
-            }
             if (players.at(i).direction == DIR_RIGHT) players.at(i).snake.at(0).x += 1;
             if (players.at(i).direction == DIR_LEFT) players.at(i).snake.at(0).x -= 1;
             if (players.at(i).direction == DIR_UP) players.at(i).snake.at(0).y -= 1;
@@ -139,7 +138,8 @@ private:
         for (int i = 0; i < food.size(); i++) {
             for (int j = 0; j < players.size(); j++) {
                 if (players.at(j).alive && food.at(i).x == players.at(j).snake.at(0).x && food.at(i).y == players.at(j).snake.at(0).y) {
-                    players.at(j).snake.emplace_back(players.at(j).snake.at(players.at(j).snake.size()-1));
+                    for (int k = 0; k < TAIL_GAIN; k++)
+                        players.at(j).snake.emplace_back(players.at(j).snake.at(players.at(j).snake.size()-1));
                     food.erase(food.begin()+i);
                     i--;
                     break;

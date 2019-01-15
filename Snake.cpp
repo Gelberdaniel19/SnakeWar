@@ -53,10 +53,5 @@ int main()
 		std::cout << "Winner: " << winner << std::endl;
 	}
 
-	// Main Game
-	Game* game = new Game();
-	std::cout << game->Start() << std::endl;
-	delete game;
-
 	CleanSDL();
 }
