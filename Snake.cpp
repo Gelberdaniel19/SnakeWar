@@ -13,14 +13,6 @@ void LoadSDL()
 	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_SetRenderDrawColor(renderer, COLOR_BG, 255);
-
-	// Load controllers
-    for (int i = 0; i < SDL_NumJoysticks() && i < 8; i++) {
-		if (SDL_IsGameController(i)) {
-			controllers.at(i) = SDL_GameControllerOpen(i);
-			std::cout << SDL_GameControllerMapping(controllers.at(i)) << std::endl;
-		}
-	}
 }
 
 void CleanSDL()
@@ -51,6 +43,10 @@ int main()
 		int winner = game->Start();
 		delete game;
 		std::cout << "Winner: " << winner << std::endl;
+
+		TitleScreen* title = new TitleScreen();
+		title->Start();
+		delete title;
 	}
 
 	CleanSDL();

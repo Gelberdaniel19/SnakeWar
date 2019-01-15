@@ -94,10 +94,31 @@ private:
 		SDL_RenderPresent(renderer);
 	}
 
+	// Clears player data. This is for when players finish the game
+	// and return to the title screen.
+	void ClearData()
+	{
+		// Load controllers
+	    for (int i = 0; i < SDL_NumJoysticks() && i < 8; i++) {
+			if (SDL_IsGameController(i)) {
+				controllers.at(i) = SDL_GameControllerOpen(i);
+				std::cout << SDL_GameControllerMapping(controllers.at(i)) << std::endl;
+			}
+		}
+
+		// Reset bindings
+		controller1 = -1;
+		controller2 = -1;
+		controller3 = -1;
+		controller4 = -1;
+	}
+
 public:
 	// The main loop for the title screen
 	void Start()
 	{
+		ClearData();
+
 		// First render
 		RenderTitleScreen();
 
