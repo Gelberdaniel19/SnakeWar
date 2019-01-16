@@ -21,8 +21,8 @@ private:
 
 			// Load the text texture based on if the player is ready
 			TextTexture t;
-			if (playerCount() < i+1) t = makeText("Press \'A\'", 30, COLOR_BG);
-			else t = makeText(text2, 45, 0, 0, 0);
+			if (playerCount() < i+1) t = makeTextWithShadow("Press \'A\'", 30, COLOR_BG, 1, COLOR_BLACK);
+			else t = makeTextWithShadow(text2, 45, COLOR_WHITE, 3, COLOR_BLACK);
 
 			// Render the text based on which player it is
 			if (i == 0) renderText(t, 33+350/2-t.w/2, 33+300/2-t.h/2);
@@ -36,7 +36,7 @@ private:
 	void RenderStartMessage()
 	{
 		if (playerCount() >= 1) {
-			TextTexture t = makeText("Press \'start\' to play", 55, 230, 230, 255);
+			TextTexture t = makeTextWithShadow("Press \'start\' to play", 55, 230, 230, 255, 3, 30, 30, 30);
 			renderText(t, WIN_WIDTH/2-t.w/2, 700);
 		}
 	}
@@ -99,7 +99,7 @@ public:
 					if (e.cbutton.button == SDL_CONTROLLER_BUTTON_START)
 						if (getPlayerNum(cnum))
 							selecting = false;
-							
+
 					RenderTitleScreen();
 					break;
 				}

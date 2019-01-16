@@ -15,6 +15,8 @@
 #define COLOR_P4 241,196,0
 #define COLOR_WALL 170,170,200
 #define COLOR_FOOD 255,220,220
+#define COLOR_WHITE 255,255,255
+#define COLOR_BLACK 0,0,0
 
 // Game over options
 #define OPTION_AGAIN 0
@@ -51,6 +53,27 @@ TextTexture makeText(std::string text, int fontSize, Uint8 r, Uint8 g, Uint8 b) 
 	TTF_CloseFont(font);
 	return result;
 }
+
+TextTexture makeTextWithShadow(std::string text,
+		int fontSize, Uint8 r, Uint8 g, Uint8 b,
+		int offset, Uint8 rb, Uint8 gb, Uint8 bb) {
+	TTF_Font* font = TTF_OpenFont("assets/upheavtt.ttf", fontSize);
+
+	SDL_Surface* fgSurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{r, g, b});
+	SDL_Surface* bgSurface = TTF_RenderText_Blended(font, text.c_str(), SDL_Color{rb, gb, bb});
+	SDL_Rect rect = {-offset, -offset, fgSurface->w, fgSurface->h};
+
+	SDL_SetSurfaceBlendMode(fgSurface, SDL_BLENDMODE_BLEND);
+	SDL_BlitSurface(fgSurface, NULL, bgSurface, &rect);
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, bgSurface);
+	TextTexture result{bgSurface->w, bgSurface->h, tex};
+
+	SDL_FreeSurface(fgSurface);
+	SDL_FreeSurface(bgSurface);
+	TTF_CloseFont(font);
+	return result;
+}
+
 void renderText(TextTexture t, int x, int y) {
 	SDL_Rect rect{x, y, t.w, t.h};
 	SDL_RenderCopy(renderer, t.texture, NULL, &rect);

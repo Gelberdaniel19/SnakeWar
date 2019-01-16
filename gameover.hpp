@@ -19,7 +19,7 @@ private:
 
         // Text inside box
         std::string text = "Player " + std::to_string(winner) + " wins!";
-        TextTexture t = makeText(text, 35, 0, 0, 0);
+        TextTexture t = makeTextWithShadow(text, 35, COLOR_BG, 3, COLOR_WHITE);
         renderText(t, WIN_WIDTH/2-t.w/2, 200+300/2-t.h/2);
     }
 
@@ -27,22 +27,22 @@ private:
     void RenderOutsideText()
     {
         // Game over message
-        TextTexture t = makeText("Game Over", 55, 230, 230, 255);
+        TextTexture t = makeTextWithShadow("Game Over", 55, 230, 230, 255, 3, COLOR_BLACK);
         renderText(t, WIN_WIDTH/2-t.w/2, 50);
 
         // Instructions message
-        t = makeText("Menu", 30, 210, 210, 235);
+        t = makeTextWithShadow("Menu", 30, 210, 210, 235, 2, COLOR_BLACK);
         int menuHeight = t.h;
         renderText(t, 50, WIN_HEIGHT-50-t.h);
 
-        t = makeText("Again", 30, 210, 210, 235);
+        t = makeTextWithShadow("Again", 30, 210, 210, 235, 2, COLOR_BLACK);
         int againWidth = t.w;
         renderText(t, 50, WIN_HEIGHT-50-t.h-menuHeight-10);
 
-        t = makeText("\'B\'", 30, 210, 210, 235);
+        t = makeTextWithShadow("\'B\'", 30, 210, 210, 235, 2, COLOR_BLACK);
         renderText(t, 50+againWidth+50, WIN_HEIGHT-50-t.h);
 
-        t = makeText("\'A\'", 30, 210, 210, 235);
+        t = makeTextWithShadow("\'A\'", 30, 210, 210, 235, 2, COLOR_BLACK);
         renderText(t, 50+againWidth+50, WIN_HEIGHT-50-t.h-menuHeight-10);
     }
 
