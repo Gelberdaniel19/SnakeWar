@@ -1,5 +1,6 @@
 # Snake War
 A 1-4 player competitive Snake-like game.
+## [Preview](https://www.youtube.com/watch?v=pz9lKAMsX_8)
 
 This game follows the basic rules of Snake, but the game features a larger map and accelerated growth. Try to trap your opponents to make them run into themselves or you. Play alone, or with up to three others in a last-man-standing game.
 
